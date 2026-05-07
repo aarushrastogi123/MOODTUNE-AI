@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ──────────────────────────────────────────────────────────── */
+:root {
+  --bg-primary:    #060608;
+  --bg-secondary:  #0d0d14;
+  --bg-card:       #12121c;
+  --bg-elevated:   #1a1a2e;
+  --brand-blue:    #3d5aff;
+  --brand-purple:  #a855f7;
+  --brand-pink:    #ec4899;
+  --text-primary:  #ffffff;
+  --text-secondary:#9999cc;
+  --text-muted:    #6b6b9a;
+  --border:        #2e2e4a;
+  --player-height: 88px;
+  --sidebar-width: 240px;
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar Styling ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-blue);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-purple);
+}
+
+/* ─── Custom Component Classes ───────────────────────────────────────────────── */
+@layer components {
+  /* Glass card effect */
+  .glass-card {
+    @apply bg-dark-700/80 backdrop-blur-md border border-dark-400/50 rounded-2xl;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Premium gradient card */
+  .gradient-card {
+    background: linear-gradient(135deg, rgba(61,90,255,0.08) 0%, rgba(168,85,247,0.04) 100%);
+    border: 1px solid rgba(61,90,255,0.15);
+    @apply rounded-2xl backdrop-blur-sm;
+  }
+
+  /* Brand button */
+  .btn-brand {
+    @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200;
+    background: linear-gradient(135deg, #3d5aff, #a855f7);
+    box-shadow: 0 4px 20px rgba(61,90,255,0.3);
+  }
+
+  .btn-brand:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(61,90,255,0.5);
+  }
+
+  .btn-brand:active {
+    transform: translateY(0);
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply px-6 py-3 rounded-xl font-semibold text-white border border-dark-400 
+           hover:border-brand-500/50 hover:bg-brand-500/10 transition-all duration-200;
+  }
+
+  /* Input field */
+  .input-field {
+    @apply w-full px-4 py-3 bg-dark-700 border border-dark-400 rounded-xl text-white
+           placeholder-dark-200 focus:outline-none focus:border-brand-500 
+           focus:ring-2 focus:ring-brand-500/20 transition-all duration-200;
+  }
+
+  /* Waveform bars */
+  .waveform-bar {
+    @apply w-0.5 bg-brand-500 rounded-full;
+    animation: waveform 1.2s ease-in-out infinite;
+  }
+
+  /* Song card hover effect */
+  .song-card {
+    @apply glass-card p-4 cursor-pointer transition-all duration-300;
+  }
+
+  .song-card:hover {
+    @apply border-brand-500/40;
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(61,90,255,0.15);
+  }
+
+  /* Sidebar nav link */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-dark-100 
+           hover:text-white hover:bg-dark-600 transition-all duration-200 font-medium;
+  }
+
+  .nav-link.active {
+    @apply text-white bg-brand-500/20 border-l-2 border-brand-500;
+  }
+
+  /* Mood badge */
+  .mood-badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply h-1 bg-dark-400 rounded-full cursor-pointer overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-100;
+    background: linear-gradient(90deg, #3d5aff, #a855f7);
+  }
+
+  /* Emotion badge colors */
+  .emotion-happy    { @apply bg-yellow-500/20 text-yellow-400 border border-yellow-500/30; }
+  .emotion-sad      { @apply bg-blue-500/20 text-blue-400 border border-blue-500/30; }
+  .emotion-angry    { @apply bg-red-500/20 text-red-400 border border-red-500/30; }
+  .emotion-neutral  { @apply bg-gray-500/20 text-gray-400 border border-gray-500/30; }
+  .emotion-surprise { @apply bg-orange-500/20 text-orange-400 border border-orange-500/30; }
+  .emotion-calm     { @apply bg-teal-500/20 text-teal-400 border border-teal-500/30; }
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+
+/* Rotating album art */
+.album-spin {
+  animation: spin 12s linear infinite;
+}
+
+.album-spin.paused {
+  animation-play-state: paused;
+}
+
+/* Particle background */
+.particles-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(61,90,255,0.4);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Webcam overlay pulse */
+.webcam-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Shimmer loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-elevated) 50%, var(--bg-card) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(61,90,255,0.3); }
+  50%       { box-shadow: 0 0 50px rgba(61,90,255,0.7); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes waveform {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.7; }
+  50%       { transform: scaleY(1.5); opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Range Input Styling ────────────────────────────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border);
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 8px rgba(61,90,255,0.5);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+/* ─── Layout Helpers ─────────────────────────────────────────────────────────── */
+.main-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 1fr var(--player-height);
+  min-height: 100vh;
+}
+
+.content-area {
+  overflow-y: auto;
+  padding-bottom: calc(var(--player-height) + 20px);
+}
+
+/* ─── Tooltip ────────────────────────────────────────────────────────────────── */
+.tooltip {
+  @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 
+         text-xs text-white bg-dark-500 rounded-lg pointer-events-none opacity-0
+         transition-opacity duration-200 whitespace-nowrap z-50;
+}
+
+.group:hover .tooltip {
+  @apply opacity-100;
+}
