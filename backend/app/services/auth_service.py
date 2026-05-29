@@ -14,8 +14,13 @@ from app.database.db import get_db
 from app.models.models import User
 from app.utils.config import settings
 
-# Password hashing context using bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing — prefer bcrypt, fall back to sha256_crypt for compatibility
+try:
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    # Quick test to verify bcrypt actually works
+    pwd_context.hash("test")
+except Exception:
+    pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 # JWT bearer scheme for protected routes
 security = HTTPBearer()

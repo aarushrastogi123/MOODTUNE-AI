@@ -4,8 +4,8 @@ Defines all SQLAlchemy database models mapped to PostgreSQL tables.
 """
 
 from sqlalchemy import (
-    Column, Integer, String, Text, Float,
-    DateTime, ForeignKey, Boolean, Enum
+    Column, Integer, String, Float,
+    DateTime, ForeignKey, Boolean
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -43,8 +43,8 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     avatar_url = Column(String(500), nullable=True)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())
 
     # Relationships
     history = relationship("History", back_populates="user", cascade="all, delete-orphan")
@@ -68,7 +68,7 @@ class Song(Base):
     genre = Column(String(100), nullable=True)
     year = Column(Integer, nullable=True)
     play_count = Column(Integer, default=0)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relationships
     history = relationship("History", back_populates="song")
@@ -86,7 +86,7 @@ class Trigger(Base):
     trigger_word = Column(String(100), nullable=False, index=True)
     created_by = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     priority = Column(Integer, default=1)                   # Higher = preferred match
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relationships
     song = relationship("Song", back_populates="triggers")
@@ -103,7 +103,7 @@ class History(Base):
     song_id = Column(Integer, ForeignKey("songs.id", ondelete="SET NULL"), nullable=True)
     played_by = Column(String(20), default="manual")        # manual | emotion | trigger
     detected_mood = Column(String(50), nullable=True)       # Mood detected at play time
-    played_at = Column(DateTime(timezone=True), server_default=func.now())
+    played_at = Column(DateTime, server_default=func.now())
 
     # Relationships
     user = relationship("User", back_populates="history")
@@ -118,7 +118,7 @@ class Favorite(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     song_id = Column(Integer, ForeignKey("songs.id", ondelete="CASCADE"), nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(DateTime, server_default=func.now())
 
     # Relationships
     user = relationship("User", back_populates="favorites")

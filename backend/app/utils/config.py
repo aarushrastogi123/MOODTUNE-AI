@@ -9,7 +9,7 @@ from typing import List
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/moodtune_db"
+    DATABASE_URL: str = "sqlite:///./moodtune.db"
 
     # JWT
     SECRET_KEY: str = "moodtune-super-secret-jwt-key"

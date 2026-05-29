@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FiPlay, FiPause, FiSkipBack, FiSkipForward,
-  FiShuffle, FiRepeat, FiVolume2, FiVolumex,
+  FiShuffle, FiRepeat, FiVolume2, FiVolumeX,
   FiHeart, FiList,
 } from 'react-icons/fi';
 import { TbRepeatOnce } from 'react-icons/tb';
@@ -219,7 +219,7 @@ export default function MusicPlayer() {
               onClick={toggleMute}
               className="text-dark-200 hover:text-white transition-colors flex-shrink-0"
             >
-              {isMuted ? <FiVolumex size={20} /> : <FiVolume2 size={20} />}
+              {isMuted ? <FiVolumeX size={20} /> : <FiVolume2 size={20} />}
             </button>
             <input
               type="range"
